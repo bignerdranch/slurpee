@@ -1,18 +1,12 @@
 import Foundation
 
-print("Hello, World!")
-
 let fm = FileManager.default
-let currentWorkingDirectory = fm.currentDirectoryPath // The Build/Products/Debug directory
-print("HOME: \(currentWorkingDirectory)")
+let home = fm.homeDirectoryForCurrentUser
 
-// get the top-level as URLs
-let filePaths = try! fm.contentsOfDirectory(atPath: currentWorkingDirectory)
-print("\(filePaths)")
+// `File`s of everything in the home directory
+let files = fm.filesInDirectory(at: home)
 
-for path in filePaths {
-    var isDirectory: ObjCBool = false
-    _ = fm.fileExists(atPath: path, isDirectory: &isDirectory)
-
-    print("\(path) is directory \(isDirectory)")
+for file in files {
+    print("\(file)")
 }
+
