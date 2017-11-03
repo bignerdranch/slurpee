@@ -51,7 +51,7 @@ struct File {
 
 extension File: CustomStringConvertible {
     var description: String {
-        return "File: \(url)"
+        return "File: \(url) \n  size = \(fileSize!)\n  type = \(fileType)"
     }
 }
 
