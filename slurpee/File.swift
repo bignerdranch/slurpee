@@ -42,6 +42,10 @@ struct File {
         let type = ((try? FileManager.default.attributesOfItem(atPath: url.path)[FileAttributeKey.type] as? String) ?? "") ?? ""
         return FileType(type: type)
     }
+
+    init(url: URL) {
+        self.url = url
+    }
 }
 
 
