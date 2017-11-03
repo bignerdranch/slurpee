@@ -9,6 +9,10 @@ import Foundation
 struct File {
     /// Where in the filesystem this particular file lives.
     let url: URL
+
+    var fileSize: Int? {
+        return try? FileManager.default.attributesOfItem(atPath: url.path)[FileAttributeKey.size] as? Int ?? 0
+    }
 }
 
 
