@@ -51,10 +51,9 @@ struct File {
 
 extension File: CustomStringConvertible {
     var description: String {
-        return "File: \(url) \n  size = \(fileSize!)\n  type = \(fileType)"
+        return "File: \(url) file size = \(fileSize!)  type = \(fileType)"
     }
 }
-
 
 extension FileManager {
 
@@ -73,4 +72,35 @@ extension FileManager {
             return []
         }
     }
+    
+    // total size of directory, deep
+    func totalSizeOfDirectory(at url: URL) -> Int {
+        let files = self.filesInDirectory(at: url)
+        var size = 0
+
+        for file in files {
+            if file.fileType == .directory {
+                size += totalSizeOfDirectory(at: file.url)
+            } else {
+                size += file.fileSize ?? 0
+            }
+        }
+        
+        return size
+    }
+    
+    // total size for a flat directory
+    func sizeOfDirectory(at url: URL) -> Int {
+        let files = self.filesInDirectory(at: url)
+        
+        
+        let size = files.reduce(0, { accumulator, file in accumulator + (file.fileSize ?? 0) })
+        print("size! \(size)")
+        return size
+    }
 }
+
+
+
+
+
