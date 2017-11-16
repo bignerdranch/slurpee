@@ -79,10 +79,12 @@ extension FileManager {
         var size = 0
 
         for file in files {
-            if file.fileType == .directory {
-                size += totalSizeOfDirectory(at: file.url)
-            } else {
-                size += file.fileSize ?? 0
+            autoreleasepool {
+                if file.fileType == .directory {
+                    size += totalSizeOfDirectory(at: file.url)
+                } else {
+                    size += file.fileSize ?? 0
+                }
             }
         }
         
@@ -92,7 +94,6 @@ extension FileManager {
     // total size for a flat directory
     func sizeOfDirectory(at url: URL) -> Int {
         let files = self.filesInDirectory(at: url)
-        
         
         let size = files.reduce(0, { accumulator, file in accumulator + (file.fileSize ?? 0) })
         print("size! \(size)")
