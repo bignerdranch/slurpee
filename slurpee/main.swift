@@ -1,24 +1,31 @@
 /* How to discover
 
+File struct:
+  - url
+  - size
+  - File System Type (file, directory, etc)
+  - (any other metadata we want)
+
 how to tell if things are different. How things are different
 (ordered from most efficient to least)
-
-File struct:
-  - size
-  - url
-  - (any other metadat we want)
 
 - file size
 
 - file content checksum of a subset
   - first K, last K, then couple of K in the middle.
+  - Can do by seeking and reading 1K buffers and comparing
   
 - file content checksum of entire contents
-   CRC, MD5, or just sum up all the bytes, or something
+  - CRC, MD5, or just sum up all the bytes, or something
+  - Can do by either using an existing MD5/CRC algorithm, or
+  - shell-out to `md5sum` or `sum
 
 
 --- is there a fast way to get a file type
   - mp3 vs jpeg vs MSWord document
+  - shell-out to `file`
+  - or adapt the Darwin implementation of `file` (which is old-style tense C code)
+  
 - a way of disambiguating files
 
 
@@ -38,7 +45,43 @@ flatmap
    - "hoists" collections
    [[[a, b, nil, c], [d, e]]][f, nil, g]
    [a, b, c, d, e, f, g]
+   
+Map/Reduce?
 
+Resource load
+  - do it in parallel as we walk the file system
+    - for each file, toss on to a producer/consumer queue for checksumming, or something
+    - which can do a bunch at once
+    - and then some data structure that boils down.
+  - Reading files (or chunks of files) into memory to process, perhaps
+    - reading a 70 gigabyte file will give us a bad day
+    - need read by chunks, or use memory-mapped file
+  - or a bunch of fork/exec calls
+  - Reading portions of files and processing them
+  - One File structure per entity in the file system (millions)
+
+Lazy collections?
+  - "lazy tuple" - (file size, segmented checksum, file type, total checksum)
+  -  FileA and FileB - hey, are file sizes the same?  If so, then check the segmented checksum
+  
+- and also keep running total.
+- throw in a hash map data structure.  Check to see in there.
+
+* Hash[Size] - look up via File.size
+  * Files, or segmented checksums
+    * full checksum.
+    
+let hash = DuplicateHashCollectionBidirectionalInsanity()
+
+for file in theWorld {
+    existingThing = hash[file.size]
+    if not - first guy we've seen with this size {
+        hash[file.size] = file
+    } else if we do, we've seen others {
+        hash[file.size = [existing file 1, existing file 2, file]
+    }
+}
+  
 */
 
 
