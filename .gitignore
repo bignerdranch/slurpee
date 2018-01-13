@@ -1,3 +1,16 @@
+# Finder Droppings
+
+.DS_Store
+
+# emacs droppings
+*~
+*#
+
+# markd droppings
+oopack
+oop1
+oop2
+
 # Created by https://www.gitignore.io/api/swift,xcode
 
 ### Swift ###
